@@ -192,6 +192,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      call_waiter: { Args: { p_table_number: number }; Returns: undefined }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -199,6 +200,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      request_bill: { Args: { p_table_number: number }; Returns: undefined }
     }
     Enums: {
       app_role: "owner" | "chef" | "customer"
