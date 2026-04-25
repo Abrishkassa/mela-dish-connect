@@ -2,6 +2,7 @@ export interface MultiLang {
   en: string;
   am: string;
   sid: string;
+  [key: string]: string;
 }
 
 export interface MenuItem {
