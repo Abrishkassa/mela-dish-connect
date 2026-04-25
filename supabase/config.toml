@@ -1,1 +1,4 @@
 project_id = "ahqvcvydlvuqtkjcpdjr"
+
+[functions.staff-signup]
+verify_jwt = false
