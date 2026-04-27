@@ -190,10 +190,11 @@ function TableMenu() {
       }
 
       orderId = order.id;
+      const newOrderId = order.id;
 
       const { error: itemsErr } = await supabase.from("order_items").insert(
         cart.lines.map((l) => ({
-          order_id: orderId,
+          order_id: newOrderId,
           menu_item_id: l.item.id,
           name_snapshot: l.item.name,
           unit_price: Number(l.item.price),
