@@ -234,29 +234,43 @@ function TabBtn({ active, onClick, children }: { active: boolean; onClick: () =>
 }
 
 function OrderCard({
-  order, lang, onUpdate,
+  order, lang, now, onUpdate,
 }: {
   order: Order;
   lang: "en" | "am" | "sid";
+  now: number;
   onUpdate: (id: string, s: "cooking" | "served") => void;
 }) {
-  const minutes = Math.floor((Date.now() - new Date(order.created_at).getTime()) / 60000);
+  const minutes = Math.floor((now - new Date(order.created_at).getTime()) / 60000);
   const isFlag = order.call_waiter || order.request_bill;
+  const isOverdue = !isFlag && minutes > 30 && (order.status === "pending" || order.status === "cooking");
   const flagIcon = order.call_waiter ? <Bell className="h-5 w-5" /> : <Receipt className="h-5 w-5" />;
   const flagText = order.call_waiter ? "Waiter Call" : "Bill Request";
 
   return (
     <article
       className={`flex flex-col rounded-2xl border bg-card p-4 shadow-card transition-smooth animate-fade-up ${
-        isFlag ? "border-spice/60 animate-pulse-glow" : order.status === "cooking" ? "border-gold/60" : "border-border"
+        isOverdue
+          ? "border-destructive bg-destructive/5 animate-pulse-glow ring-2 ring-destructive/40"
+          : isFlag
+            ? "border-spice/60 animate-pulse-glow"
+            : order.status === "cooking"
+              ? "border-gold/60"
+              : "border-border"
       }`}
     >
       <header className="mb-3 flex items-center justify-between">
         <span className="font-display text-2xl text-foreground">
           Table {order.table_number}
         </span>
-        <span className="flex items-center gap-1 text-xs text-muted-foreground">
+        <span
+          className={`flex items-center gap-1 text-xs ${
+            isOverdue ? "font-semibold text-destructive" : "text-muted-foreground"
+          }`}
+        >
+          {isOverdue && <Bell className="h-3 w-3" />}
           <Clock className="h-3 w-3" /> {minutes}m
+          {isOverdue && <span className="ml-1 uppercase tracking-wider">{t("overdue", lang)}</span>}
         </span>
       </header>
 
