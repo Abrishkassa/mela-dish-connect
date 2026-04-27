@@ -47,6 +47,13 @@ function Kitchen() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [items, setItems] = useState<MenuItem[]>([]);
   const [tab, setTab] = useState<"orders" | "stock">("orders");
+  const [now, setNow] = useState(() => Date.now());
+
+  // Tick every 30s so elapsed times & overdue flags update live
+  useEffect(() => {
+    const id = setInterval(() => setNow(Date.now()), 30_000);
+    return () => clearInterval(id);
+  }, []);
 
   useEffect(() => {
     if (loading) return;
