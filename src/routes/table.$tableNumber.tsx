@@ -33,6 +33,9 @@ export const Route = createFileRoute("/table/$tableNumber")({
       { name: "robots", content: "noindex" },
     ],
   }),
+  validateSearch: (search: Record<string, unknown>) => ({
+    addTo: typeof search.addTo === "string" ? search.addTo : undefined,
+  }),
   component: () => (
     <CartProvider>
       <TableMenu />
