@@ -145,9 +145,10 @@ function TableMenu() {
 
     // Append to existing order if requested
     if (orderId) {
+      const oid = orderId;
       const { error: itemsErr } = await supabase.from("order_items").insert(
         cart.lines.map((l) => ({
-          order_id: orderId,
+          order_id: oid,
           menu_item_id: l.item.id,
           name_snapshot: l.item.name,
           unit_price: Number(l.item.price),
