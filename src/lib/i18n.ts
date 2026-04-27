@@ -90,6 +90,29 @@ const dict: Dict = {
   delete: { en: "Delete", am: "ሰርዝ", sid: "Hunqi" },
   image_url: { en: "Image URL", am: "የምስል URL", sid: "Misile URL" },
   no_orders: { en: "No active orders", am: "ምንም ትዕዛዞች የሉም", sid: "Ajaja diino" },
+
+  // tracking
+  order_status: { en: "Order Status", am: "የትዕዛዝ ሁኔታ", sid: "Ajaji Akata" },
+  your_order: { en: "Your Order", am: "የእርስዎ ትዕዛዝ", sid: "Kiyye Ajaja" },
+  add_more_items: { en: "Add more items", am: "ተጨማሪ እቃዎች ጨምር", sid: "Wole sagale ledi" },
+  add_more_prompt: {
+    en: "Would you like to add more items to your order?",
+    am: "ወደ ትዕዛዝዎ ተጨማሪ እቃዎች መጨመር ይፈልጋሉ?",
+    sid: "Ajajikkira wole sagale ledara hasiratto?",
+  },
+  yes_add_more: { en: "Yes, add more", am: "አዎ፣ ጨምር", sid: "Ee, ledi" },
+  back_to_tracking: { en: "Back to my order", am: "ወደ ትዕዛዜ ተመለስ", sid: "Ajajira higi" },
+  status_pending: { en: "Received — awaiting kitchen", am: "ተቀብሏል — ኩሽና በመጠበቅ", sid: "Adhoonni — muddinora agaranni" },
+  status_cooking: { en: "Your meal is being prepared", am: "ምግብዎ እየተዘጋጀ ነው", sid: "Sagaleki bushshanni no" },
+  status_served: { en: "Enjoy your meal!", am: "ምግብዎን ይደሰቱ!", sid: "Sagale baxxe!" },
+  placed_at: { en: "Placed at", am: "የተደረገው", sid: "Aji" },
+  active_order_exists: {
+    en: "You have an active order at this table",
+    am: "በዚህ ጠረጴዛ ላይ የነቃ ትዕዛዝ አለዎት",
+    sid: "Kuni gobbaxa aana giddidi ajaja noohe",
+  },
+  view_order: { en: "View Order", am: "ትዕዛዝ ይመልከቱ", sid: "Ajaja lai" },
+  overdue: { en: "Overdue", am: "ዘግይቷል", sid: "Goofi" },
 };
 
 export function t(key: keyof typeof dict, lang: Lang): string {

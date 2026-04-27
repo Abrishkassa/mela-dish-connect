@@ -47,6 +47,13 @@ function Kitchen() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [items, setItems] = useState<MenuItem[]>([]);
   const [tab, setTab] = useState<"orders" | "stock">("orders");
+  const [now, setNow] = useState(() => Date.now());
+
+  // Tick every 30s so elapsed times & overdue flags update live
+  useEffect(() => {
+    const id = setInterval(() => setNow(Date.now()), 30_000);
+    return () => clearInterval(id);
+  }, []);
 
   useEffect(() => {
     if (loading) return;
@@ -166,11 +173,27 @@ function Kitchen() {
               <p className="mt-4 font-display text-2xl text-muted-foreground">{t("no_orders", lang)}</p>
             </div>
           ) : (
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {orders.map((o) => (
-                <OrderCard key={o.id} order={o} lang={lang} onUpdate={updateStatus} />
-              ))}
-            </div>
+            <>
+              {(() => {
+                const overdueCount = orders.filter(
+                  (o) => !o.call_waiter && !o.request_bill && (now - new Date(o.created_at).getTime()) / 60000 > 30,
+                ).length;
+                if (overdueCount === 0) return null;
+                return (
+                  <div className="mb-4 flex items-center gap-3 rounded-2xl border border-destructive/60 bg-destructive/10 px-4 py-3 text-destructive animate-pulse-glow">
+                    <Bell className="h-5 w-5" />
+                    <span className="font-medium">
+                      {overdueCount} order{overdueCount > 1 ? "s" : ""} overdue (&gt; 30 min)
+                    </span>
+                  </div>
+                );
+              })()}
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {orders.map((o) => (
+                  <OrderCard key={o.id} order={o} lang={lang} now={now} onUpdate={updateStatus} />
+                ))}
+              </div>
+            </>
           )
         ) : (
           <div className="grid gap-3 md:grid-cols-2">
@@ -211,29 +234,43 @@ function TabBtn({ active, onClick, children }: { active: boolean; onClick: () =>
 }
 
 function OrderCard({
-  order, lang, onUpdate,
+  order, lang, now, onUpdate,
 }: {
   order: Order;
   lang: "en" | "am" | "sid";
+  now: number;
   onUpdate: (id: string, s: "cooking" | "served") => void;
 }) {
-  const minutes = Math.floor((Date.now() - new Date(order.created_at).getTime()) / 60000);
+  const minutes = Math.floor((now - new Date(order.created_at).getTime()) / 60000);
   const isFlag = order.call_waiter || order.request_bill;
+  const isOverdue = !isFlag && minutes > 30 && (order.status === "pending" || order.status === "cooking");
   const flagIcon = order.call_waiter ? <Bell className="h-5 w-5" /> : <Receipt className="h-5 w-5" />;
   const flagText = order.call_waiter ? "Waiter Call" : "Bill Request";
 
   return (
     <article
       className={`flex flex-col rounded-2xl border bg-card p-4 shadow-card transition-smooth animate-fade-up ${
-        isFlag ? "border-spice/60 animate-pulse-glow" : order.status === "cooking" ? "border-gold/60" : "border-border"
+        isOverdue
+          ? "border-destructive bg-destructive/5 animate-pulse-glow ring-2 ring-destructive/40"
+          : isFlag
+            ? "border-spice/60 animate-pulse-glow"
+            : order.status === "cooking"
+              ? "border-gold/60"
+              : "border-border"
       }`}
     >
       <header className="mb-3 flex items-center justify-between">
         <span className="font-display text-2xl text-foreground">
           Table {order.table_number}
         </span>
-        <span className="flex items-center gap-1 text-xs text-muted-foreground">
+        <span
+          className={`flex items-center gap-1 text-xs ${
+            isOverdue ? "font-semibold text-destructive" : "text-muted-foreground"
+          }`}
+        >
+          {isOverdue && <Bell className="h-3 w-3" />}
           <Clock className="h-3 w-3" /> {minutes}m
+          {isOverdue && <span className="ml-1 uppercase tracking-wider">{t("overdue", lang)}</span>}
         </span>
       </header>
 

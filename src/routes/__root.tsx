@@ -73,7 +73,7 @@ function RootComponent() {
     <LanguageProvider>
       <AuthProvider>
         <Outlet />
-        <Toaster />
+        <Toaster position="top-center" />
       </AuthProvider>
     </LanguageProvider>
   );
