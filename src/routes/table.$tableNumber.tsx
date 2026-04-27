@@ -42,10 +42,42 @@ export const Route = createFileRoute("/table/$tableNumber")({
 
 function TableMenu() {
   const { tableNumber } = Route.useParams();
+  const search = Route.useSearch() as { addTo?: string };
+  const navigate = useNavigate();
   const { lang } = useLang();
   const [items, setItems] = useState<MenuItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [pairingFor, setPairingFor] = useState<MenuItem | null>(null);
+  const [activeOrderId, setActiveOrderId] = useState<string | null>(null);
+  const [checkingActive, setCheckingActive] = useState(true);
+
+  const tableNum = parseInt(tableNumber, 10);
+  const appendingToOrderId = search?.addTo ?? null;
+
+  // On mount, check if this table already has an active (pending/cooking) order
+  useEffect(() => {
+    if (!Number.isFinite(tableNum)) {
+      setCheckingActive(false);
+      return;
+    }
+    const check = async () => {
+      const { data } = await supabase
+        .from("orders")
+        .select("id, status")
+        .eq("table_number", tableNum)
+        .in("status", ["pending", "cooking"])
+        .eq("call_waiter", false)
+        .eq("request_bill", false)
+        .order("created_at", { ascending: false })
+        .limit(1);
+      const existing = data?.[0];
+      if (existing && existing.id !== appendingToOrderId) {
+        setActiveOrderId(existing.id);
+      }
+      setCheckingActive(false);
+    };
+    check();
+  }, [tableNum, appendingToOrderId]);
 
   useEffect(() => {
     const load = async () => {
@@ -58,7 +90,6 @@ function TableMenu() {
     };
     load();
 
-    // Realtime: stock toggles update instantly
     const channel = supabase
       .channel("menu_items_public")
       .on(
@@ -105,49 +136,88 @@ function TableMenu() {
 
   const sendOrder = async () => {
     if (cart.lines.length === 0) return;
-    const tableNum = parseInt(tableNumber, 10);
-    const { data: order, error } = await supabase
-      .from("orders")
-      .insert({
-        table_number: tableNum,
-        status: "pending",
-        total: cart.total,
-        call_waiter: false,
-        request_bill: false,
-      })
-      .select()
-      .single();
-
-    if (error || !order) {
-      toast.error(error?.message ?? "Could not send order");
+    if (!Number.isFinite(tableNum) || tableNum < 1 || tableNum > 999) {
+      toast.error("Invalid table number");
       return;
     }
 
-    const { error: itemsErr } = await supabase.from("order_items").insert(
-      cart.lines.map((l) => ({
-        order_id: order.id,
-        menu_item_id: l.item.id,
-        name_snapshot: l.item.name,
-        unit_price: l.item.price,
-        quantity: l.qty,
-      })),
-    );
-    if (itemsErr) {
-      toast.error(itemsErr.message);
-      return;
+    let orderId = appendingToOrderId;
+
+    // Append to existing order if requested
+    if (orderId) {
+      const { error: itemsErr } = await supabase.from("order_items").insert(
+        cart.lines.map((l) => ({
+          order_id: orderId,
+          menu_item_id: l.item.id,
+          name_snapshot: l.item.name,
+          unit_price: Number(l.item.price),
+          quantity: l.qty,
+        })),
+      );
+      if (itemsErr) {
+        toast.error(itemsErr.message);
+        return;
+      }
+      // Bump total
+      const { data: existing } = await supabase
+        .from("orders")
+        .select("total")
+        .eq("id", orderId)
+        .single();
+      if (existing) {
+        await supabase
+          .from("orders")
+          .update({ total: Number(existing.total) + cart.total })
+          .eq("id", orderId);
+      }
+    } else {
+      const { data: order, error } = await supabase
+        .from("orders")
+        .insert({
+          table_number: tableNum,
+          status: "pending" as const,
+          total: cart.total,
+          call_waiter: false,
+          request_bill: false,
+        })
+        .select("id")
+        .single();
+
+      if (error || !order) {
+        toast.error(error?.message ?? "Could not send order");
+        return;
+      }
+
+      orderId = order.id;
+
+      const { error: itemsErr } = await supabase.from("order_items").insert(
+        cart.lines.map((l) => ({
+          order_id: orderId,
+          menu_item_id: l.item.id,
+          name_snapshot: l.item.name,
+          unit_price: Number(l.item.price),
+          quantity: l.qty,
+        })),
+      );
+      if (itemsErr) {
+        toast.error(itemsErr.message);
+        return;
+      }
     }
+
     toast.success(t("order_sent", lang));
     cart.clear();
+    navigate({ to: "/track/$orderId", params: { orderId: orderId! } });
   };
 
   const callWaiter = async () => {
-    const { error } = await supabase.rpc("call_waiter", { p_table_number: parseInt(tableNumber, 10) });
+    const { error } = await supabase.rpc("call_waiter", { p_table_number: tableNum });
     if (error) toast.error(error.message);
     else toast.success(t("waiter_called", lang));
   };
 
   const requestBill = async () => {
-    const { error } = await supabase.rpc("request_bill", { p_table_number: parseInt(tableNumber, 10) });
+    const { error } = await supabase.rpc("request_bill", { p_table_number: tableNum });
     if (error) toast.error(error.message);
     else toast.success(t("bill_requested", lang));
   };
@@ -155,6 +225,38 @@ function TableMenu() {
   const recommendedItem = pairingFor?.recommended_item_id
     ? itemsById.get(pairingFor.recommended_item_id) ?? null
     : null;
+
+  // Active-order gate: if this table already has a live order (and we're not adding to it), redirect to tracking
+  if (checkingActive) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <div className="h-10 w-10 animate-pulse rounded-full bg-gradient-gold" />
+      </div>
+    );
+  }
+
+  if (activeOrderId) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background px-6">
+        <div className="max-w-md rounded-3xl border border-gold/40 bg-card p-8 text-center shadow-elegant">
+          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-gold text-primary-foreground shadow-glow">
+            <Receipt className="h-6 w-6" />
+          </div>
+          <h2 className="font-display text-2xl text-foreground">{t("active_order_exists", lang)}</h2>
+          <p className="mt-2 text-sm text-muted-foreground">
+            {t("table", lang)} {tableNumber}
+          </p>
+          <Link
+            to="/track/$orderId"
+            params={{ orderId: activeOrderId }}
+            className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-gradient-gold px-6 py-3 font-medium text-primary-foreground shadow-glow transition-smooth hover:opacity-95"
+          >
+            {t("view_order", lang)}
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background pb-32">
