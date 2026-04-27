@@ -173,11 +173,27 @@ function Kitchen() {
               <p className="mt-4 font-display text-2xl text-muted-foreground">{t("no_orders", lang)}</p>
             </div>
           ) : (
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {orders.map((o) => (
-                <OrderCard key={o.id} order={o} lang={lang} onUpdate={updateStatus} />
-              ))}
-            </div>
+            <>
+              {(() => {
+                const overdueCount = orders.filter(
+                  (o) => !o.call_waiter && !o.request_bill && (now - new Date(o.created_at).getTime()) / 60000 > 30,
+                ).length;
+                if (overdueCount === 0) return null;
+                return (
+                  <div className="mb-4 flex items-center gap-3 rounded-2xl border border-destructive/60 bg-destructive/10 px-4 py-3 text-destructive animate-pulse-glow">
+                    <Bell className="h-5 w-5" />
+                    <span className="font-medium">
+                      {overdueCount} order{overdueCount > 1 ? "s" : ""} overdue (&gt; 30 min)
+                    </span>
+                  </div>
+                );
+              })()}
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {orders.map((o) => (
+                  <OrderCard key={o.id} order={o} lang={lang} now={now} onUpdate={updateStatus} />
+                ))}
+              </div>
+            </>
           )
         ) : (
           <div className="grid gap-3 md:grid-cols-2">
