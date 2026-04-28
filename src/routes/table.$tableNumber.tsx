@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase/client.custom";
 import { CartProvider, useCart } from "@/lib/cart-context";
 import { useLang } from "@/lib/lang-context";
 import { t, pickLang } from "@/lib/i18n";
