@@ -176,25 +176,24 @@ function TableMenu() {
           .eq("id", orderId);
       }
     } else {
-      const { data: order, error } = await supabase
+      const newOrderId = crypto.randomUUID();
+      const { error } = await supabase
         .from("orders")
         .insert({
+          id: newOrderId,
           table_number: tableNum,
           status: "pending" as const,
           total: cart.total,
           call_waiter: false,
           request_bill: false,
-        })
-        .select("id")
-        .single();
+        });
 
-      if (error || !order) {
+      if (error) {
         toast.error(error?.message ?? "Could not send order");
         return;
       }
 
-      orderId = order.id;
-      const newOrderId = order.id;
+      orderId = newOrderId;
 
       const { error: itemsErr } = await supabase.from("order_items").insert(
         cart.lines.map((l) => ({
