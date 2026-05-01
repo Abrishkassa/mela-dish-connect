@@ -113,6 +113,31 @@ const dict: Dict = {
   },
   view_order: { en: "View Order", am: "ትዕዛዝ ይመልከቱ", sid: "Ajaja lai" },
   overdue: { en: "Overdue", am: "ዘግይቷል", sid: "Goofi" },
+
+  // feedback
+  feedback_title: {
+    en: "Your order has been served! How was your experience?",
+    am: "ትዕዛዝዎ ቀርቧል! ተሞክሮዎ እንዴት ነበር?",
+    sid: "Ajaji soyime! Hiittono ikkoonni?",
+  },
+  feedback_rating_label: { en: "Overall rating", am: "አጠቃላይ ደረጃ", sid: "Cuumu Qoolo" },
+  feedback_meal_label: { en: "What did you think of the meal?", am: "ስለ ምግቡ ምን አሰቡ?", sid: "Sagale daafira maa hedoonni?" },
+  feedback_restaurant_label: { en: "Comments about the restaurant?", am: "ስለ ምግብ ቤቱ አስተያየት?", sid: "Sagale minira hedo?" },
+  feedback_system_label: { en: "Comments about the ordering system?", am: "ስለ ትዕዛዝ ስርዓቱ አስተያየት?", sid: "Ajaja sistemera hedo?" },
+  feedback_submit: { en: "Submit Feedback", am: "አስተያየት ላክ", sid: "Hedo Soyi" },
+  feedback_thanks: { en: "Thank you for your feedback!", am: "ስለ አስተያየትዎ እናመሰግናለን!", sid: "Hedokki daafira galateemma!" },
+  feedback_optional: { en: "Optional", am: "አማራጭ", sid: "Doori" },
+
+  // admin stats
+  stats: { en: "Stats", am: "ስታትስ", sid: "Statisi" },
+  stats_orders_per_table: { en: "Orders per Table (Today)", am: "በጠረጴዛ ትዕዛዞች (ዛሬ)", sid: "Gobbaxaho Ajaja (Techo)" },
+  stats_top_items: { en: "Top Ordered Items", am: "ከፍተኛ የተዘዙ", sid: "Cuumu Ajajantino" },
+  stats_feedback: { en: "Customer Feedback", am: "የደንበኛ አስተያየት", sid: "Manchu Hedo" },
+  stats_today: { en: "Today", am: "ዛሬ", sid: "Techo" },
+  stats_week: { en: "This Week", am: "ይህ ሳምንት", sid: "Kuni Lamala" },
+  stats_all: { en: "All Time", am: "ሁሉም ጊዜ", sid: "Cuumu Yanna" },
+  stats_no_data: { en: "No data yet", am: "ገና ምንም መረጃ የለም", sid: "Mittu beetto diino" },
+  unauthorized: { en: "Unauthorized", am: "ፈቃድ የለዎትም", sid: "Diqqolloontooti" },
 };
 
 export function t(key: keyof typeof dict, lang: Lang): string {

@@ -24,6 +24,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { FeedbackPrompt } from "@/components/FeedbackPrompt";
 
 export const Route = createFileRoute("/track/$orderId")({
   head: () => ({
@@ -219,14 +220,17 @@ function TrackOrder() {
         )}
 
         {order.status === "served" && (
-          <Link
-            to="/table/$tableNumber"
-            params={{ tableNumber: String(order.table_number) }}
-            className="mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-gradient-gold py-3.5 font-medium text-primary-foreground shadow-glow"
-          >
-            <ChefHat className="h-5 w-5" />
-            New Order
-          </Link>
+          <>
+            <FeedbackPrompt orderId={order.id} tableNumber={order.table_number} />
+            <Link
+              to="/table/$tableNumber"
+              params={{ tableNumber: String(order.table_number) }}
+              className="mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-gradient-gold py-3.5 font-medium text-primary-foreground shadow-glow"
+            >
+              <ChefHat className="h-5 w-5" />
+              New Order
+            </Link>
+          </>
         )}
       </main>
 

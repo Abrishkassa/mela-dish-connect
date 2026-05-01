@@ -14,6 +14,47 @@ export type Database = {
   }
   public: {
     Tables: {
+      feedback: {
+        Row: {
+          created_at: string
+          id: string
+          meal_comment: string | null
+          order_id: string
+          rating: number
+          restaurant_comment: string | null
+          system_comment: string | null
+          table_number: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          meal_comment?: string | null
+          order_id: string
+          rating: number
+          restaurant_comment?: string | null
+          system_comment?: string | null
+          table_number: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          meal_comment?: string | null
+          order_id?: string
+          rating?: number
+          restaurant_comment?: string | null
+          system_comment?: string | null
+          table_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "feedback_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       menu_items: {
         Row: {
           category: string
