@@ -15,6 +15,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as TrackOrderIdRouteImport } from './routes/track.$orderId'
 import { Route as TableTableNumberRouteImport } from './routes/table.$tableNumber'
 import { Route as StaffLoginRouteImport } from './routes/staff.login'
+import { Route as AdminStatsRouteImport } from './routes/admin.stats'
 
 const KitchenRoute = KitchenRouteImport.update({
   id: '/kitchen',
@@ -46,19 +47,26 @@ const StaffLoginRoute = StaffLoginRouteImport.update({
   path: '/staff/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminStatsRoute = AdminStatsRouteImport.update({
+  id: '/stats',
+  path: '/stats',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/kitchen': typeof KitchenRoute
+  '/admin/stats': typeof AdminStatsRoute
   '/staff/login': typeof StaffLoginRoute
   '/table/$tableNumber': typeof TableTableNumberRoute
   '/track/$orderId': typeof TrackOrderIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/kitchen': typeof KitchenRoute
+  '/admin/stats': typeof AdminStatsRoute
   '/staff/login': typeof StaffLoginRoute
   '/table/$tableNumber': typeof TableTableNumberRoute
   '/track/$orderId': typeof TrackOrderIdRoute
@@ -66,8 +74,9 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/kitchen': typeof KitchenRoute
+  '/admin/stats': typeof AdminStatsRoute
   '/staff/login': typeof StaffLoginRoute
   '/table/$tableNumber': typeof TableTableNumberRoute
   '/track/$orderId': typeof TrackOrderIdRoute
@@ -78,6 +87,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/kitchen'
+    | '/admin/stats'
     | '/staff/login'
     | '/table/$tableNumber'
     | '/track/$orderId'
@@ -86,6 +96,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/kitchen'
+    | '/admin/stats'
     | '/staff/login'
     | '/table/$tableNumber'
     | '/track/$orderId'
@@ -94,6 +105,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/kitchen'
+    | '/admin/stats'
     | '/staff/login'
     | '/table/$tableNumber'
     | '/track/$orderId'
@@ -101,7 +113,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AdminRoute: typeof AdminRoute
+  AdminRoute: typeof AdminRouteWithChildren
   KitchenRoute: typeof KitchenRoute
   StaffLoginRoute: typeof StaffLoginRoute
   TableTableNumberRoute: typeof TableTableNumberRoute
@@ -152,12 +164,29 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StaffLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/stats': {
+      id: '/admin/stats'
+      path: '/stats'
+      fullPath: '/admin/stats'
+      preLoaderRoute: typeof AdminStatsRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
+interface AdminRouteChildren {
+  AdminStatsRoute: typeof AdminStatsRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminStatsRoute: AdminStatsRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AdminRoute: AdminRoute,
+  AdminRoute: AdminRouteWithChildren,
   KitchenRoute: KitchenRoute,
   StaffLoginRoute: StaffLoginRoute,
   TableTableNumberRoute: TableTableNumberRoute,
