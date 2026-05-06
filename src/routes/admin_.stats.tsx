@@ -502,3 +502,12 @@ function Empty({ label }: { label: string }) {
     </div>
   );
 }
+
+function Kpi({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-2xl border border-border bg-background/50 px-3 py-2">
+      <div className="text-[10px] uppercase tracking-widest text-muted-foreground">{label}</div>
+      <div className="font-display text-lg text-foreground">{value}</div>
+    </div>
+  );
+}
