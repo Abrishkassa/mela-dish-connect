@@ -8,8 +8,8 @@ import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { MelaLogo } from "@/components/MelaLogo";
 import { BarChart3, ChefHat, Crown, LogOut, Settings, Star } from "lucide-react";
 import {
-  BarChart,
-  Bar,
+  Area,
+  AreaChart,
   XAxis,
   YAxis,
   Tooltip,
