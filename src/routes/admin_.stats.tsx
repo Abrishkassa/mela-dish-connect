@@ -18,7 +18,7 @@ import {
 } from "recharts";
 import type { MultiLang } from "@/lib/types";
 
-export const Route = createFileRoute("/admin/stats")({
+export const Route = createFileRoute("/admin_/stats")({
   head: () => ({
     meta: [
       { title: "Stats — Mela Admin" },
