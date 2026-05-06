@@ -279,11 +279,11 @@ function AdminStats() {
               const max = Math.max(...ordersPerTableToday.map((x) => x.count), 1);
               return (
                 <div className="grid grid-cols-4 gap-3 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10">
-                  {ordersPerTableToday.map((t) => {
-                    const intensity = t.count / max;
+                  {ordersPerTableToday.map((row) => {
+                    const intensity = row.count / max;
                     return (
                       <div
-                        key={t.table}
+                        key={row.table}
                         className="group relative flex aspect-square flex-col items-center justify-center rounded-2xl border border-gold/20 transition-smooth hover:scale-105 hover:border-gold"
                         style={{
                           background: `linear-gradient(135deg, color-mix(in oklab, hsl(var(--primary)) ${
@@ -296,11 +296,11 @@ function AdminStats() {
                               ? "0 0 24px -8px hsl(var(--primary) / 0.6)"
                               : undefined,
                         }}
-                        title={`${t.table} — ${t.count} orders`}
+                        title={`${row.table} — ${row.count} orders`}
                       >
-                        <span className="font-display text-2xl text-foreground">{t.count}</span>
+                        <span className="font-display text-2xl text-foreground">{row.count}</span>
                         <span className="text-[10px] uppercase tracking-widest text-muted-foreground">
-                          {t.table}
+                          {row.table}
                         </span>
                       </div>
                     );
