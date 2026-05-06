@@ -244,47 +244,92 @@ function AdminStats() {
       </header>
 
       <main className="mx-auto max-w-7xl space-y-8 px-6 py-8">
-        {/* Orders per table */}
+        {/* Orders per table — KPI + heatmap + trend */}
         <section className="rounded-3xl border border-border bg-card p-6 shadow-card">
-          <div className="mb-4 flex items-center justify-between">
-            <h2 className="font-display text-2xl text-gradient-gold">
-              {t("stats_orders_per_table", lang)}
-            </h2>
-            <span className="text-xs text-muted-foreground">
-              {ordersPerTableToday.reduce((s, x) => s + x.count, 0)} total
-            </span>
+          <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h2 className="font-display text-2xl text-gradient-gold">
+                {t("stats_orders_per_table", lang)}
+              </h2>
+              <p className="mt-1 text-xs text-muted-foreground">Today · live</p>
+            </div>
+            {(() => {
+              const totalToday = ordersPerTableToday.reduce((s, x) => s + x.count, 0);
+              const activeTables = ordersPerTableToday.length;
+              const peak = ordersPerTableToday.reduce(
+                (m, x) => (x.count > m.count ? x : m),
+                { table: "—", count: 0 },
+              );
+              const avg = activeTables ? (totalToday / activeTables).toFixed(1) : "0";
+              return (
+                <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                  <Kpi label="Orders" value={String(totalToday)} />
+                  <Kpi label="Active tables" value={String(activeTables)} />
+                  <Kpi label="Peak" value={`${peak.table} · ${peak.count}`} />
+                  <Kpi label="Avg / table" value={avg} />
+                </div>
+              );
+            })()}
           </div>
+
           {ordersPerTableToday.length === 0 ? (
             <Empty label={t("stats_no_data", lang)} />
           ) : (
-            <div className="h-64">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={ordersPerTableToday}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                  <XAxis dataKey="table" stroke="hsl(var(--muted-foreground))" fontSize={12} />
-                  <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} allowDecimals={false} />
-                  <Tooltip
-                    contentStyle={{
-                      background: "hsl(var(--card))",
-                      border: "1px solid hsl(var(--border))",
-                      borderRadius: 12,
-                    }}
-                  />
-                  <Bar dataKey="count" fill="hsl(var(--primary))" radius={[8, 8, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
+            (() => {
+              const max = Math.max(...ordersPerTableToday.map((x) => x.count), 1);
+              return (
+                <div className="grid grid-cols-4 gap-3 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10">
+                  {ordersPerTableToday.map((t) => {
+                    const intensity = t.count / max;
+                    return (
+                      <div
+                        key={t.table}
+                        className="group relative flex aspect-square flex-col items-center justify-center rounded-2xl border border-gold/20 transition-smooth hover:scale-105 hover:border-gold"
+                        style={{
+                          background: `linear-gradient(135deg, color-mix(in oklab, hsl(var(--primary)) ${
+                            10 + intensity * 70
+                          }%, transparent), color-mix(in oklab, hsl(var(--primary)) ${
+                            5 + intensity * 40
+                          }%, transparent))`,
+                          boxShadow:
+                            intensity > 0.6
+                              ? "0 0 24px -8px hsl(var(--primary) / 0.6)"
+                              : undefined,
+                        }}
+                        title={`${t.table} — ${t.count} orders`}
+                      >
+                        <span className="font-display text-2xl text-foreground">{t.count}</span>
+                        <span className="text-[10px] uppercase tracking-widest text-muted-foreground">
+                          {t.table}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })()
           )}
 
-          <h3 className="mt-6 mb-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
-            Last 7 days trend
-          </h3>
-          <div className="h-40">
+          <div className="mt-8 flex items-center justify-between">
+            <h3 className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+              Last 7 days
+            </h3>
+            <span className="text-xs text-muted-foreground">
+              {ordersPer7Days.reduce((s, d) => s + d.count, 0)} total
+            </span>
+          </div>
+          <div className="mt-2 h-44">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={ordersPer7Days}>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                <XAxis dataKey="day" stroke="hsl(var(--muted-foreground))" fontSize={12} />
-                <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} allowDecimals={false} />
+              <AreaChart data={ordersPer7Days} margin={{ top: 8, right: 8, left: -16, bottom: 0 }}>
+                <defs>
+                  <linearGradient id="trendFill" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity={0.5} />
+                    <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
+                <XAxis dataKey="day" stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} />
+                <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} allowDecimals={false} tickLine={false} axisLine={false} />
                 <Tooltip
                   contentStyle={{
                     background: "hsl(var(--card))",
@@ -292,8 +337,14 @@ function AdminStats() {
                     borderRadius: 12,
                   }}
                 />
-                <Bar dataKey="count" fill="hsl(var(--primary))" radius={[6, 6, 0, 0]} />
-              </BarChart>
+                <Area
+                  type="monotone"
+                  dataKey="count"
+                  stroke="hsl(var(--primary))"
+                  strokeWidth={2}
+                  fill="url(#trendFill)"
+                />
+              </AreaChart>
             </ResponsiveContainer>
           </div>
         </section>
