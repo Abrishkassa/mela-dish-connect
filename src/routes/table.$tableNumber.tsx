@@ -53,7 +53,9 @@ function TableMenu() {
   const [loading, setLoading] = useState(true);
   const [pairingFor, setPairingFor] = useState<MenuItem | null>(null);
   const [activeOrderId, setActiveOrderId] = useState<string | null>(null);
+  const [checkingActive, setCheckingActive] = useState(true);
   const [activeFilter, setActiveFilter] = useState<string>("all");
+  const [takeaway, setTakeaway] = useState(false);
 
   const tableNum = parseInt(tableNumber, 10);
   const appendingToOrderId = search?.addTo ?? null;
