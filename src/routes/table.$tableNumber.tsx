@@ -288,6 +288,7 @@ function TableMenu() {
               {t("table", lang)} {tableNumber}
             </span>
             <LanguageSwitcher compact />
+            <ThemeToggle compact />
           </div>
         </div>
       </header>
