@@ -6,6 +6,7 @@ import { useLang } from "@/lib/lang-context";
 import { t, pickLang } from "@/lib/i18n";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { MelaLogo } from "@/components/MelaLogo";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { Bell, ChefHat, CheckCircle2, Clock, Flame, LogOut, Receipt, Settings } from "lucide-react";
 import type { MenuItem, MultiLang } from "@/lib/types";
 import { toast } from "sonner";
