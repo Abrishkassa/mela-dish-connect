@@ -25,6 +25,15 @@ import {
 } from "@/components/ui/sheet";
 import { toast } from "sonner";
 
+const MEAL_FILTERS: { value: string; label: string }[] = [
+  { value: "all", label: "All" },
+  { value: "breakfast", label: "Breakfast" },
+  { value: "lunch", label: "Lunch" },
+  { value: "dinner", label: "Dinner" },
+  { value: "soft drinks", label: "Soft Drinks" },
+  { value: "hot drinks", label: "Hot Drinks" },
+];
+
 export const Route = createFileRoute("/table/$tableNumber")({
   head: ({ params }) => ({
     meta: [
