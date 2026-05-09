@@ -6,6 +6,7 @@ import { useLang } from "@/lib/lang-context";
 import { t, pickLang } from "@/lib/i18n";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { MelaLogo } from "@/components/MelaLogo";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { Bell, ChefHat, CheckCircle2, Clock, Flame, LogOut, Receipt, Settings } from "lucide-react";
 import type { MenuItem, MultiLang } from "@/lib/types";
 import { toast } from "sonner";
@@ -37,7 +38,18 @@ interface Order {
   call_waiter: boolean;
   request_bill: boolean;
   created_at: string;
+  notes: string | null;
   order_items: OrderItem[];
+}
+
+function isTakeawayNote(notes: string | null | undefined): boolean {
+  if (!notes) return false;
+  try {
+    const p = JSON.parse(notes);
+    return !!p?.takeaway;
+  } catch {
+    return false;
+  }
 }
 
 function Kitchen() {
@@ -146,6 +158,7 @@ function Kitchen() {
               </Link>
             )}
             <LanguageSwitcher compact />
+            <ThemeToggle compact />
             <button
               onClick={() => signOut()}
               className="rounded-full border border-border bg-card px-4 py-2 text-sm hover:border-destructive hover:text-destructive"
@@ -244,6 +257,7 @@ function OrderCard({
   const minutes = Math.floor((now - new Date(order.created_at).getTime()) / 60000);
   const isFlag = order.call_waiter || order.request_bill;
   const isOverdue = !isFlag && minutes > 30 && (order.status === "pending" || order.status === "cooking");
+  const isTakeaway = isTakeawayNote(order.notes);
   const flagIcon = order.call_waiter ? <Bell className="h-5 w-5" /> : <Receipt className="h-5 w-5" />;
   const flagText = order.call_waiter ? "Waiter Call" : "Bill Request";
 
@@ -254,14 +268,21 @@ function OrderCard({
           ? "border-destructive bg-destructive/5 animate-pulse-glow ring-2 ring-destructive/40"
           : isFlag
             ? "border-spice/60 animate-pulse-glow"
-            : order.status === "cooking"
-              ? "border-gold/60"
-              : "border-border"
+            : isTakeaway
+              ? "border-gold ring-1 ring-gold/40"
+              : order.status === "cooking"
+                ? "border-gold/60"
+                : "border-border"
       }`}
     >
       <header className="mb-3 flex items-center justify-between">
-        <span className="font-display text-2xl text-foreground">
+        <span className="flex items-center gap-2 font-display text-2xl text-foreground">
           Table {order.table_number}
+          {isTakeaway && (
+            <span className="rounded-full border border-gold bg-gold/10 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-gold">
+              🥡 Takeaway
+            </span>
+          )}
         </span>
         <span
           className={`flex items-center gap-1 text-xs ${

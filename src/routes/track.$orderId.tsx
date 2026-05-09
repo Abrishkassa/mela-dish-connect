@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client.custom";
 import { useLang } from "@/lib/lang-context";
 import { t, pickLang } from "@/lib/i18n";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { MelaLogo } from "@/components/MelaLogo";
 import {
   CheckCircle2,
@@ -49,7 +50,18 @@ interface Order {
   status: "pending" | "cooking" | "served" | "cancelled";
   total: number;
   created_at: string;
+  notes: string | null;
   order_items: OrderItem[];
+}
+
+function isTakeawayNote(notes: string | null | undefined): boolean {
+  if (!notes) return false;
+  try {
+    const p = JSON.parse(notes);
+    return !!p?.takeaway;
+  } catch {
+    return false;
+  }
 }
 
 function TrackOrder() {
@@ -135,6 +147,7 @@ function TrackOrder() {
               {t("table", lang)} {order.table_number}
             </span>
             <LanguageSwitcher compact />
+            <ThemeToggle compact />
           </div>
         </div>
       </header>
@@ -142,9 +155,18 @@ function TrackOrder() {
       <main className="mx-auto max-w-2xl px-4 pt-8">
         {/* Status timeline */}
         <section className="rounded-3xl border border-gold/30 bg-card p-6 shadow-elegant animate-fade-up">
-          <p className="text-xs uppercase tracking-widest text-muted-foreground">
-            {t("order_status", lang)}
-          </p>
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-xs uppercase tracking-widest text-muted-foreground">
+              {t("order_status", lang)}
+            </p>
+            <span className={`rounded-full border px-3 py-1 text-[10px] font-medium uppercase tracking-wider ${
+              isTakeawayNote(order.notes)
+                ? "border-gold bg-gold/10 text-gold"
+                : "border-border bg-card text-muted-foreground"
+            }`}>
+              {isTakeawayNote(order.notes) ? "🥡 Takeaway" : "🍽️ Dine-in"}
+            </span>
+          </div>
           <h1 className="mt-2 font-display text-3xl text-gradient-gold">
             {order.status === "pending" && t("status_pending", lang)}
             {order.status === "cooking" && t("status_cooking", lang)}

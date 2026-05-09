@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import heroImg from "@/assets/hero.jpg";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { MelaLogo } from "@/components/MelaLogo";
 import { useLang } from "@/lib/lang-context";
 import { t } from "@/lib/i18n";
@@ -43,6 +44,7 @@ function Landing() {
           <MelaLogo />
           <div className="flex items-center gap-3">
             <LanguageSwitcher />
+            <ThemeToggle />
             <Link
               to="/staff/login"
               className="rounded-full border border-border bg-card/50 px-4 py-2 text-sm font-medium backdrop-blur transition-smooth hover:border-gold/60 hover:text-gold"

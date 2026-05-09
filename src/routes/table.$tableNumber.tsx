@@ -5,6 +5,7 @@ import { CartProvider, useCart } from "@/lib/cart-context";
 import { useLang } from "@/lib/lang-context";
 import { t, pickLang } from "@/lib/i18n";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { MelaLogo } from "@/components/MelaLogo";
 import { categoryLabelKey, CATEGORY_KEYS, type MenuItem } from "@/lib/types";
 import { ChefHat, Minus, Plus, ShoppingBag, Sparkles, Bell, Receipt, X } from "lucide-react";
@@ -24,6 +25,15 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { toast } from "sonner";
+
+const MEAL_FILTERS: { value: string; label: string }[] = [
+  { value: "all", label: "All" },
+  { value: "breakfast", label: "Breakfast" },
+  { value: "lunch", label: "Lunch" },
+  { value: "dinner", label: "Dinner" },
+  { value: "soft drinks", label: "Soft Drinks" },
+  { value: "hot drinks", label: "Hot Drinks" },
+];
 
 export const Route = createFileRoute("/table/$tableNumber")({
   head: ({ params }) => ({
@@ -54,6 +64,8 @@ function TableMenu() {
   const [pairingFor, setPairingFor] = useState<MenuItem | null>(null);
   const [activeOrderId, setActiveOrderId] = useState<string | null>(null);
   const [checkingActive, setCheckingActive] = useState(true);
+  const [activeFilter, setActiveFilter] = useState<string>("all");
+  const [takeaway, setTakeaway] = useState(false);
 
   const tableNum = parseInt(tableNumber, 10);
   const appendingToOrderId = search?.addTo ?? null;
@@ -186,6 +198,7 @@ function TableMenu() {
           total: cart.total,
           call_waiter: false,
           request_bill: false,
+          notes: JSON.stringify({ takeaway }),
         });
 
       if (error) {
@@ -276,9 +289,32 @@ function TableMenu() {
               {t("table", lang)} {tableNumber}
             </span>
             <LanguageSwitcher compact />
+            <ThemeToggle compact />
           </div>
         </div>
       </header>
+
+      {/* Meal-type filter chips */}
+      <div className="sticky top-[57px] z-30 -mx-0 border-b border-border/40 bg-background/80 backdrop-blur-md">
+        <div className="mx-auto flex max-w-3xl gap-2 overflow-x-auto px-4 py-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {MEAL_FILTERS.map((f) => {
+            const active = activeFilter === f.value;
+            return (
+              <button
+                key={f.value}
+                onClick={() => setActiveFilter(f.value)}
+                className={`shrink-0 rounded-full px-4 py-1.5 text-xs font-medium uppercase tracking-wider transition-smooth ${
+                  active
+                    ? "bg-gradient-gold text-primary-foreground shadow-glow"
+                    : "border border-border bg-card text-muted-foreground hover:border-gold hover:text-gold"
+                }`}
+              >
+                {f.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
 
       {/* Categories */}
       <main className="mx-auto max-w-3xl px-4 pt-6">
@@ -288,13 +324,15 @@ function TableMenu() {
               <div key={i} className="h-40 animate-pulse rounded-2xl bg-card" />
             ))}
           </div>
-        ) : (
-          CATEGORY_KEYS.map((cat) =>
+        ) : activeFilter === "all" ? (
+          Object.keys(grouped).map((cat) =>
             grouped[cat] && grouped[cat].length > 0 ? (
               <section key={cat} className="mb-10">
                 <h2 className="mb-4 flex items-center gap-3 font-display text-3xl text-foreground">
                   <span className="h-px w-8 bg-gradient-gold" />
-                  {t(categoryLabelKey(cat) as never, lang)}
+                  {(CATEGORY_KEYS as readonly string[]).includes(cat)
+                    ? t(categoryLabelKey(cat) as never, lang)
+                    : cat.replace(/\b\w/g, (c) => c.toUpperCase())}
                 </h2>
                 <div className="space-y-3">
                   {grouped[cat].map((item) => (
@@ -304,6 +342,26 @@ function TableMenu() {
               </section>
             ) : null,
           )
+        ) : (
+          (() => {
+            const filtered = items.filter(
+              (it) => (it.category ?? "").toLowerCase().trim() === activeFilter,
+            );
+            if (filtered.length === 0) {
+              return (
+                <div className="py-16 text-center text-muted-foreground">
+                  No items in this category yet.
+                </div>
+              );
+            }
+            return (
+              <div className="space-y-3">
+                {filtered.map((item) => (
+                  <MenuCard key={item.id} item={item} onAdd={handleAdd} />
+                ))}
+              </div>
+            );
+          })()
         )}
       </main>
 
@@ -378,6 +436,30 @@ function TableMenu() {
                   </li>
                 ))}
               </ul>
+              <div className="mt-4 grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={() => setTakeaway(false)}
+                  className={`rounded-full py-2.5 text-sm font-medium transition-smooth ${
+                    !takeaway
+                      ? "bg-gradient-gold text-primary-foreground shadow-glow"
+                      : "border border-border bg-card text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  🍽️ Dine-in
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setTakeaway(true)}
+                  className={`rounded-full py-2.5 text-sm font-medium transition-smooth ${
+                    takeaway
+                      ? "bg-gradient-gold text-primary-foreground shadow-glow"
+                      : "border border-border bg-card text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  🥡 Takeaway
+                </button>
+              </div>
               <div className="mt-4 flex items-center justify-between border-t border-border pt-4">
                 <span className="text-muted-foreground">{t("total", lang)}</span>
                 <span className="font-display text-2xl text-gold">{cart.total.toFixed(0)} ETB</span>

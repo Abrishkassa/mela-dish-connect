@@ -5,6 +5,7 @@ import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { t } from "@/lib/i18n";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { MelaLogo } from "@/components/MelaLogo";
 import { ChefHat, Crown } from "lucide-react";
 import { toast } from "sonner";
@@ -73,6 +74,7 @@ function StaffLogin() {
       <header className="mx-auto flex max-w-6xl items-center justify-between px-6 pt-6">
         <Link to="/"><MelaLogo /></Link>
         <LanguageSwitcher />
+            <ThemeToggle />
       </header>
 
       <main className="mx-auto flex min-h-[calc(100vh-100px)] max-w-md flex-col items-center justify-center px-6 py-12">

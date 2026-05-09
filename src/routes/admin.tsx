@@ -5,6 +5,7 @@ import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { t, pickLang } from "@/lib/i18n";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { MelaLogo } from "@/components/MelaLogo";
 import { BarChart3, ChefHat, Crown, LogOut, Pencil, Plus, Trash2, Utensils } from "lucide-react";
 import type { MenuItem } from "@/lib/types";
@@ -183,6 +184,7 @@ function Admin() {
               <ChefHat className="mr-1.5 inline h-4 w-4" /> {t("kitchen", lang)}
             </Link>
             <LanguageSwitcher compact />
+            <ThemeToggle compact />
             <button
               onClick={() => signOut()}
               className="rounded-full border border-border bg-card px-4 py-2 text-sm hover:border-destructive hover:text-destructive"
