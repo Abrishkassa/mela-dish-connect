@@ -50,7 +50,18 @@ interface Order {
   status: "pending" | "cooking" | "served" | "cancelled";
   total: number;
   created_at: string;
+  notes: string | null;
   order_items: OrderItem[];
+}
+
+function isTakeawayNote(notes: string | null | undefined): boolean {
+  if (!notes) return false;
+  try {
+    const p = JSON.parse(notes);
+    return !!p?.takeaway;
+  } catch {
+    return false;
+  }
 }
 
 function TrackOrder() {
