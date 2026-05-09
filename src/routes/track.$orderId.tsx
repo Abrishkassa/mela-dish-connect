@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client.custom";
 import { useLang } from "@/lib/lang-context";
 import { t, pickLang } from "@/lib/i18n";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { MelaLogo } from "@/components/MelaLogo";
 import {
   CheckCircle2,
@@ -135,6 +136,7 @@ function TrackOrder() {
               {t("table", lang)} {order.table_number}
             </span>
             <LanguageSwitcher compact />
+            <ThemeToggle compact />
           </div>
         </div>
       </header>
