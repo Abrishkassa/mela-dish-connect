@@ -37,7 +37,18 @@ interface Order {
   call_waiter: boolean;
   request_bill: boolean;
   created_at: string;
+  notes: string | null;
   order_items: OrderItem[];
+}
+
+function isTakeawayNote(notes: string | null | undefined): boolean {
+  if (!notes) return false;
+  try {
+    const p = JSON.parse(notes);
+    return !!p?.takeaway;
+  } catch {
+    return false;
+  }
 }
 
 function Kitchen() {
