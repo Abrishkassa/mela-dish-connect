@@ -188,6 +188,7 @@ function TableMenu() {
           total: cart.total,
           call_waiter: false,
           request_bill: false,
+          notes: JSON.stringify({ takeaway }),
         });
 
       if (error) {
