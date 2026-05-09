@@ -436,6 +436,30 @@ function TableMenu() {
                   </li>
                 ))}
               </ul>
+              <div className="mt-4 grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={() => setTakeaway(false)}
+                  className={`rounded-full py-2.5 text-sm font-medium transition-smooth ${
+                    !takeaway
+                      ? "bg-gradient-gold text-primary-foreground shadow-glow"
+                      : "border border-border bg-card text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  🍽️ Dine-in
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setTakeaway(true)}
+                  className={`rounded-full py-2.5 text-sm font-medium transition-smooth ${
+                    takeaway
+                      ? "bg-gradient-gold text-primary-foreground shadow-glow"
+                      : "border border-border bg-card text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  🥡 Takeaway
+                </button>
+              </div>
               <div className="mt-4 flex items-center justify-between border-t border-border pt-4">
                 <span className="text-muted-foreground">{t("total", lang)}</span>
                 <span className="font-display text-2xl text-gold">{cart.total.toFixed(0)} ETB</span>
