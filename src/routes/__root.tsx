@@ -57,9 +57,14 @@ export const Route = createRootRoute({
 
 function RootShell({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
       <head>
         <HeadContent />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('mela.theme')||'dark';var r=document.documentElement;if(t==='dark')r.classList.add('dark');else r.classList.remove('dark');}catch(e){}})();`,
+          }}
+        />
       </head>
       <body>
         {children}
@@ -71,11 +76,13 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function RootComponent() {
   return (
-    <LanguageProvider>
-      <AuthProvider>
-        <Outlet />
-        <Toaster position="top-center" />
-      </AuthProvider>
-    </LanguageProvider>
+    <ThemeProvider>
+      <LanguageProvider>
+        <AuthProvider>
+          <Outlet />
+          <Toaster position="top-center" />
+        </AuthProvider>
+      </LanguageProvider>
+    </ThemeProvider>
   );
 }
