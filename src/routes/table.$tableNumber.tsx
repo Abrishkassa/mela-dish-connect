@@ -5,6 +5,7 @@ import { CartProvider, useCart } from "@/lib/cart-context";
 import { useLang } from "@/lib/lang-context";
 import { t, pickLang } from "@/lib/i18n";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { MelaLogo } from "@/components/MelaLogo";
 import { categoryLabelKey, CATEGORY_KEYS, type MenuItem } from "@/lib/types";
 import { ChefHat, Minus, Plus, ShoppingBag, Sparkles, Bell, Receipt, X } from "lucide-react";
