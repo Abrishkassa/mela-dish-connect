@@ -155,9 +155,18 @@ function TrackOrder() {
       <main className="mx-auto max-w-2xl px-4 pt-8">
         {/* Status timeline */}
         <section className="rounded-3xl border border-gold/30 bg-card p-6 shadow-elegant animate-fade-up">
-          <p className="text-xs uppercase tracking-widest text-muted-foreground">
-            {t("order_status", lang)}
-          </p>
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-xs uppercase tracking-widest text-muted-foreground">
+              {t("order_status", lang)}
+            </p>
+            <span className={`rounded-full border px-3 py-1 text-[10px] font-medium uppercase tracking-wider ${
+              isTakeawayNote(order.notes)
+                ? "border-gold bg-gold/10 text-gold"
+                : "border-border bg-card text-muted-foreground"
+            }`}>
+              {isTakeawayNote(order.notes) ? "🥡 Takeaway" : "🍽️ Dine-in"}
+            </span>
+          </div>
           <h1 className="mt-2 font-display text-3xl text-gradient-gold">
             {order.status === "pending" && t("status_pending", lang)}
             {order.status === "cooking" && t("status_cooking", lang)}
