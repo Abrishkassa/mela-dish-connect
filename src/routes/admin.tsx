@@ -180,6 +180,9 @@ function Admin() {
             <Link to="/admin/stats" className="rounded-full border border-border bg-card px-4 py-2 text-sm hover:border-gold hover:text-gold">
               <BarChart3 className="mr-1.5 inline h-4 w-4" /> {t("stats", lang)}
             </Link>
+            <Link to="/admin/pairings" className="rounded-full border border-border bg-card px-4 py-2 text-sm hover:border-gold hover:text-gold">
+              <Wine className="mr-1.5 inline h-4 w-4" /> Pairings
+            </Link>
             <Link to="/kitchen" className="rounded-full border border-border bg-card px-4 py-2 text-sm hover:border-gold hover:text-gold">
               <ChefHat className="mr-1.5 inline h-4 w-4" /> {t("kitchen", lang)}
             </Link>
