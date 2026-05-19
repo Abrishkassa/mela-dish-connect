@@ -7,7 +7,7 @@ import { t, pickLang } from "@/lib/i18n";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { MelaLogo } from "@/components/MelaLogo";
-import { BarChart3, ChefHat, Crown, LogOut, Pencil, Plus, Trash2, Utensils } from "lucide-react";
+import { BarChart3, ChefHat, Crown, LogOut, Pencil, Plus, Trash2, Utensils, Wine } from "lucide-react";
 import type { MenuItem } from "@/lib/types";
 import { CATEGORY_KEYS } from "@/lib/types";
 import { toast } from "sonner";
