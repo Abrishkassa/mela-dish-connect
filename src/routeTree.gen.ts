@@ -16,6 +16,7 @@ import { Route as TrackOrderIdRouteImport } from './routes/track.$orderId'
 import { Route as TableTableNumberRouteImport } from './routes/table.$tableNumber'
 import { Route as StaffLoginRouteImport } from './routes/staff.login'
 import { Route as AdminStatsRouteImport } from './routes/admin_.stats'
+import { Route as AdminPairingsRouteImport } from './routes/admin_.pairings'
 
 const KitchenRoute = KitchenRouteImport.update({
   id: '/kitchen',
@@ -52,11 +53,17 @@ const AdminStatsRoute = AdminStatsRouteImport.update({
   path: '/admin/stats',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminPairingsRoute = AdminPairingsRouteImport.update({
+  id: '/admin_/pairings',
+  path: '/admin/pairings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/kitchen': typeof KitchenRoute
+  '/admin/pairings': typeof AdminPairingsRoute
   '/admin/stats': typeof AdminStatsRoute
   '/staff/login': typeof StaffLoginRoute
   '/table/$tableNumber': typeof TableTableNumberRoute
@@ -66,6 +73,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/kitchen': typeof KitchenRoute
+  '/admin/pairings': typeof AdminPairingsRoute
   '/admin/stats': typeof AdminStatsRoute
   '/staff/login': typeof StaffLoginRoute
   '/table/$tableNumber': typeof TableTableNumberRoute
@@ -76,6 +84,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/kitchen': typeof KitchenRoute
+  '/admin_/pairings': typeof AdminPairingsRoute
   '/admin_/stats': typeof AdminStatsRoute
   '/staff/login': typeof StaffLoginRoute
   '/table/$tableNumber': typeof TableTableNumberRoute
@@ -87,6 +96,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/kitchen'
+    | '/admin/pairings'
     | '/admin/stats'
     | '/staff/login'
     | '/table/$tableNumber'
@@ -96,6 +106,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/kitchen'
+    | '/admin/pairings'
     | '/admin/stats'
     | '/staff/login'
     | '/table/$tableNumber'
@@ -105,6 +116,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/kitchen'
+    | '/admin_/pairings'
     | '/admin_/stats'
     | '/staff/login'
     | '/table/$tableNumber'
@@ -115,6 +127,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRoute
   KitchenRoute: typeof KitchenRoute
+  AdminPairingsRoute: typeof AdminPairingsRoute
   AdminStatsRoute: typeof AdminStatsRoute
   StaffLoginRoute: typeof StaffLoginRoute
   TableTableNumberRoute: typeof TableTableNumberRoute
@@ -172,6 +185,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminStatsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin_/pairings': {
+      id: '/admin_/pairings'
+      path: '/admin/pairings'
+      fullPath: '/admin/pairings'
+      preLoaderRoute: typeof AdminPairingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -179,6 +199,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRoute,
   KitchenRoute: KitchenRoute,
+  AdminPairingsRoute: AdminPairingsRoute,
   AdminStatsRoute: AdminStatsRoute,
   StaffLoginRoute: StaffLoginRoute,
   TableTableNumberRoute: TableTableNumberRoute,
