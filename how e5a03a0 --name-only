@@ -1,0 +1,106 @@
+[33m48953c8[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Merge branch 'main' of https://github.com/Abrishkassa/mela-dish-connect
+[33mac4b748[m git ignore modified
+[33me5a03a0[m Added bulk pairing mode
+[33mdf72bae[m Changes
+[33m3ebbec1[m Changes
+[33ma2e9a5b[m Work in progress
+[33me88e7e8[m Added admin pairing screen
+[33m1337de2[m Changes
+[33m2084213[m Changes
+[33m3ad4166[m Changes
+[33m3774816[m Changes
+[33m97f8c80[m Work in progress
+[33m6a57dbc[m Seeded drink pairings for menu
+[33m50c6853[m Changes
+[33m7552b1b[m Added seed SQL for menu data
+[33m20dc0a8[m Changes
+[33me6b894b[m Changes
+[33m169cf9d[m Work in progress
+[33m0bec3b8[m Added theme & menu filters
+[33m99ec035[m Changes
+[33mfab8632[m Changes
+[33mce5271e[m Changes
+[33mbdd9e45[m Changes
+[33mbe24739[m Changes
+[33md5e9b82[m Changes
+[33ma5e3e72[m Changes
+[33m4b49978[m Changes
+[33m7d49011[m Changes
+[33mcb03d14[m Changes
+[33mbbe5e6d[m Changes
+[33m8e45b73[m Changes
+[33mcf0e104[m Changes
+[33me364ba7[m Changes
+[33mf2b1976[m Changes
+[33mc11ac87[m Changes
+[33m736ac52[m Changes
+[33m194f442[m Changes
+[33m8c4e015[m Changes
+[33m72e2b79[m Changes
+[33md9f6513[m Changes
+[33mae14d7e[m Changes
+[33m97be5c6[m Work in progress
+[33mbd6e2f8[m Refined stats dashboard layout
+[33m796908c[m Changes
+[33m637c4f9[m Changes
+[33m3c157bc[m Changes
+[33mb36f369[m Changes
+[33m2365667[m Admin stats wired to own DB
+[33m0a80d87[m Changes
+[33ma18b25d[m Moved stats page out of admin
+[33mb42e505[m Changes
+[33m70438fe[m Changes
+[33mb1da504[m Changes
+[33m0cc43c3[m Added feedback + stats features
+[33m0e02a0c[m Changes
+[33mcd595e2[m Changes
+[33m71ef0ec[m Changes
+[33m261746d[m Changes
+[33me93bc72[m Changes
+[33m650a5b5[m Changes
+[33mfab4498[m Added order RLS policies
+[33m4ebad02[m Changes
+[33mf0b6e6b[m Switched to custom anon client
+[33me5e0218[m Changes
+[33ma837a20[m Changes
+[33me8c9297[m Exported data to SQL file
+[33mdf1707c[m Changes
+[33m906fce4[m Fixed bugs, added tracking
+[33m691b93f[m Changes
+[33maeb628e[m Changes
+[33me9f7c0c[m Changes
+[33md9c6415[m Changes
+[33mf7d5fec[m Changes
+[33mac306dc[m Changes
+[33mcc67cf0[m Changes
+[33m7b8e155[m Changes
+[33maaa4a67[m Changes
+[33m441d28c[m Changes
+[33m9f9280f[m Changes
+[33md543a87[m Changes
+[33mf4ebaed[m Changes
+[33m27664b2[m Update site info for publish
+[33m531f071[m Built Mela Digital Menu MVP
+[33m304e3bb[m Changes
+[33m68ce4ac[m Changes
+[33me4045af[m Changes
+[33mfd45d5d[m Changes
+[33m12a3ca7[m Changes
+[33m956bbfd[m Changes
+[33ma29528d[m Changes
+[33m962bb2f[m Changes
+[33m21c49b3[m Changes
+[33m008025f[m Changes
+[33m95a2ae1[m Changes
+[33mbf041db[m Changes
+[33mb2005c2[m Changes
+[33m11a8f16[m Changes
+[33mfb74a01[m Changes
+[33m1859487[m Enabled cloud and migrated
+[33m36c5a81[m Changes
+[33m6bd406d[m Changes
+[33m2e5cdb4[m Changes
+[33m1201776[m Changes
+[33m3264921[m Changes
+[33m06fe1c9[m Work in progress
+[33m929a9a4[m template: tanstack_start_ts
