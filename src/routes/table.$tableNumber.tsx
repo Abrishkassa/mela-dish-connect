@@ -538,7 +538,7 @@ function MenuCard({ item, onAdd }: { item: MenuItem; onAdd: (i: MenuItem) => voi
 
   return (
     <article
-      className={`group relative flex gap-4 overflow-hidden rounded-2xl border border-border bg-card p-3 ${
+      className={`group relative flex gap-4 rounded-2xl border border-border bg-card p-3 ${
         unavailable ? "opacity-60" : ""
       }`}
     >
