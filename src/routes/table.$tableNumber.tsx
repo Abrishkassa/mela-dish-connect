@@ -538,7 +538,7 @@ function MenuCard({ item, onAdd }: { item: MenuItem; onAdd: (i: MenuItem) => voi
 
   return (
     <article
-      className={`group relative flex gap-4 overflow-hidden rounded-2xl border border-border bg-card p-3 shadow-card transition-smooth hover:border-gold/50 ${
+      className={`group relative flex gap-4 overflow-hidden rounded-2xl border border-border bg-card p-3 ${
         unavailable ? "opacity-60" : ""
       }`}
     >
@@ -579,7 +579,7 @@ function MenuCard({ item, onAdd }: { item: MenuItem; onAdd: (i: MenuItem) => voi
           ) : (
             <button
               onClick={() => onAdd(item)}
-              className="inline-flex items-center gap-1.5 rounded-full bg-gradient-gold px-4 py-1.5 text-sm font-medium text-primary-foreground shadow-glow transition-smooth hover:scale-105"
+              className="inline-flex items-center gap-1.5 rounded-full bg-gradient-gold px-4 py-1.5 text-sm font-medium text-primary-foreground"
             >
               <Plus className="h-4 w-4" />
               {t("add_to_cart", lang)}
