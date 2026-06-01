@@ -279,7 +279,7 @@ function TableMenu() {
   return (
     <div className="min-h-screen bg-background pb-32">
       {/* Header */}
-      <header className="sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur-xl will-change-transform">
+      <header className="sticky top-0 z-40 border-b border-border/60 bg-background">
         <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-3">
           <Link to="/" className="flex items-center">
             <MelaLogo />
@@ -295,7 +295,7 @@ function TableMenu() {
       </header>
 
       {/* Meal-type filter chips */}
-      <div className="sticky top-[57px] z-30 -mx-0 border-b border-border/40 bg-background/80 backdrop-blur-md will-change-transform">
+      <div className="sticky top-[57px] z-30 -mx-0 border-b border-border/40 bg-background">
         <div className="mx-auto flex max-w-3xl gap-2 overflow-x-auto px-4 py-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {MEAL_FILTERS.map((f) => {
             const active = activeFilter === f.value;
