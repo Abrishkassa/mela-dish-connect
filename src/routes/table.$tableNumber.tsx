@@ -386,7 +386,7 @@ function TableMenu() {
       {/* Cart bar */}
       <Sheet>
         <SheetTrigger asChild>
-          <button className="fixed inset-x-4 bottom-4 z-50 flex items-center justify-between rounded-full bg-gradient-gold px-6 py-4 text-primary-foreground shadow-glow transition-smooth hover:scale-[1.01] disabled:opacity-50">
+          <button className="fixed inset-x-4 bottom-4 z-50 flex items-center justify-between rounded-full bg-gradient-gold px-6 py-4 text-primary-foreground disabled:opacity-50" style={{transform: 'translateZ(0)', willChange: 'auto'}}>
             <span className="flex items-center gap-3 font-medium">
               <ShoppingBag className="h-5 w-5" />
               {cart.count > 0
