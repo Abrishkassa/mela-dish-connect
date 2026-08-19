@@ -334,7 +334,7 @@ function TableMenu() {
                     ? t(categoryLabelKey(cat) as never, lang)
                     : cat.replace(/\b\w/g, (c) => c.toUpperCase())}
                 </h2>
-                <div className="space-y-3">
+                <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
                   {grouped[cat].map((item) => (
                     <MenuCard key={item.id} item={item} onAdd={handleAdd} />
                   ))}
