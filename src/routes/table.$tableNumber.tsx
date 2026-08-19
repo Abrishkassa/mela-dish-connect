@@ -334,7 +334,7 @@ function TableMenu() {
                     ? t(categoryLabelKey(cat) as never, lang)
                     : cat.replace(/\b\w/g, (c) => c.toUpperCase())}
                 </h2>
-                <div className="space-y-3">
+                <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
                   {grouped[cat].map((item) => (
                     <MenuCard key={item.id} item={item} onAdd={handleAdd} />
                   ))}
@@ -355,7 +355,7 @@ function TableMenu() {
               );
             }
             return (
-              <div className="space-y-3">
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
                 {filtered.map((item) => (
                   <MenuCard key={item.id} item={item} onAdd={handleAdd} />
                 ))}
@@ -538,7 +538,7 @@ function MenuCard({ item, onAdd }: { item: MenuItem; onAdd: (i: MenuItem) => voi
 
   return (
     <article
-      className={`group relative flex gap-4 rounded-2xl border border-border bg-card p-3 ${
+      className={`group flex flex-col rounded-2xl border border-border bg-card p-3 ${
         unavailable ? "opacity-60" : ""
       }`}
     >
@@ -546,17 +546,17 @@ function MenuCard({ item, onAdd }: { item: MenuItem; onAdd: (i: MenuItem) => voi
         <img
           src={item.image_url}
           alt={pickLang(item.name, lang)}
-          className="h-24 w-24 shrink-0 rounded-xl object-cover sm:h-28 sm:w-28"
+          className="aspect-[4/3] w-full shrink-0 rounded-xl object-cover"
           loading="lazy"
         />
       ) : (
-        <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-xl bg-muted text-muted-foreground sm:h-28 sm:w-28">
-          <ChefHat className="h-6 w-6" />
+        <div className="grid aspect-[4/3] w-full place-items-center rounded-xl bg-muted text-muted-foreground">
+          <ChefHat className="h-8 w-8" />
         </div>
       )}
-      <div className="flex min-w-0 flex-1 flex-col">
+      <div className="flex min-w-0 flex-1 flex-col pt-3">
         <div className="flex items-start justify-between gap-2">
-          <h3 className="truncate font-display text-lg text-foreground sm:text-xl">
+          <h3 className="min-w-0 flex-1 truncate font-display text-base text-foreground sm:text-lg">
             {pickLang(item.name, lang)}
           </h3>
           {item.recommended_item_id && (
@@ -569,17 +569,17 @@ function MenuCard({ item, onAdd }: { item: MenuItem; onAdd: (i: MenuItem) => voi
         <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">
           {pickLang(item.description as never, lang)}
         </p>
-        <div className="mt-auto flex items-center justify-between pt-2">
-          <span className="font-display text-lg text-gold">{Number(item.price).toFixed(0)} ETB</span>
+        <div className="mt-auto flex items-center justify-between gap-2 pt-3">
+          <span className="font-display text-base text-gold sm:text-lg">{Number(item.price).toFixed(0)} ETB</span>
           {unavailable ? (
-            <span className="rounded-full border border-destructive/50 px-3 py-1 text-xs text-destructive">
+            <span className="shrink-0 rounded-full border border-destructive/50 px-2 py-1 text-xs text-destructive">
               <X className="mr-1 inline h-3 w-3" />
               {t("out_of_stock", lang)}
             </span>
           ) : (
             <button
               onClick={() => onAdd(item)}
-              className="inline-flex items-center gap-1.5 rounded-full bg-gradient-gold px-4 py-1.5 text-sm font-medium text-primary-foreground"
+              className="inline-flex shrink-0 items-center gap-1 rounded-full bg-gradient-gold px-3 py-1.5 text-sm font-medium text-primary-foreground"
             >
               <Plus className="h-4 w-4" />
               {t("add_to_cart", lang)}
