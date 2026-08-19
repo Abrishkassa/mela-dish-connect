@@ -568,9 +568,9 @@ function MenuCard({ item, onAdd }: { item: MenuItem; onAdd: (i: MenuItem) => voi
           ) : (
             <button
               onClick={() => onAdd(item)}
-              className="inline-flex shrink-0 items-center gap-1 rounded-full bg-gradient-gold px-3 py-1.5 text-sm font-medium text-primary-foreground"
+              className="inline-flex shrink-0 items-center gap-1 rounded-full bg-gradient-gold px-2 py-1 text-xs font-medium text-primary-foreground"
             >
-              <Plus className="h-4 w-4" />
+              <Plus className="h-3.5 w-3.5" />
               {t("add_to_cart", lang)}
             </button>
           )}
