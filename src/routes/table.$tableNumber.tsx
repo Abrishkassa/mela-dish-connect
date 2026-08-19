@@ -175,18 +175,7 @@ function TableMenu() {
         toast.error(itemsErr.message);
         return;
       }
-      // Bump total
-      const { data: existing } = await supabase
-        .from("orders")
-        .select("total")
-        .eq("id", orderId)
-        .single();
-      if (existing) {
-        await supabase
-          .from("orders")
-          .update({ total: Number(existing.total) + cart.total })
-          .eq("id", orderId);
-      }
+      // Total is recalculated server-side from order_items
     } else {
       const newOrderId = crypto.randomUUID();
       const { error } = await supabase
@@ -195,7 +184,7 @@ function TableMenu() {
           id: newOrderId,
           table_number: tableNum,
           status: "pending" as const,
-          total: cart.total,
+          total: 0,
           call_waiter: false,
           request_bill: false,
           notes: JSON.stringify({ takeaway }),
